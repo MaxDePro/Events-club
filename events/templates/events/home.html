@@ -1,0 +1,13 @@
+{% extends 'events/main.html' %}
+
+{% block content %}
+<center>
+
+    <h1>Hello {{name}}, here is you events for {{month}} {{year}}</h1>
+    As of time :
+    {{ cur_time }}
+    <p>{{ cal|safe }}</p>
+    Copyright (c) {{ cur_year }}
+</center>
+
+{% endblock %}
