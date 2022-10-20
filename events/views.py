@@ -2,9 +2,24 @@ from django.shortcuts import render
 import calendar
 from calendar import HTMLCalendar
 from datetime import datetime
+from django.http import HttpResponseRedirect
 from .models import *
+from .forms import *
 
-# Create your views here.
+
+def create_venue(request):
+    submitted = False
+    if request.method == 'POST':
+        form = VenueForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('?submitted=True')
+    else:
+        form = VenueForm
+        if 'submitted' in request.GET:
+            submitted = True
+
+    return render(request, 'events/create_venue.html', context={'form': form, 'submitted': submitted})
 
 
 def home(request, year=datetime.now().year, month=datetime.now().strftime('%B')):
@@ -38,3 +53,5 @@ def events_list(request):
         'list_events': list_events
     }
     return render(request, 'events/events_list.html', context)
+
+

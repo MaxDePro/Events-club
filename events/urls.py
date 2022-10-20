@@ -4,5 +4,6 @@ from.views import *
 urlpatterns = [
     path('', home, name='home'),
     path('<int:year>/<str:month>/', home, name='home'),
-    path('events/', events_list, name='events_list')
+    path('events/', events_list, name='events_list'),
+    path('venue/create/', create_venue, name='create_venue')
 ]
