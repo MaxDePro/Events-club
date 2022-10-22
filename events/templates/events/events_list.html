@@ -13,13 +13,19 @@
         <li>Managers of event: {{ event.manager }}</li>
         <li>Venue website: {{ event.venue.web }}</li>
         <li>Description of event: {{ event.description }}</li>
-        <li>
+        <br>
             Users of event:
+            <ul>
             {% for user in event.users.all %}
-            <br>
-                {{ user }}
+
+                <li>
+                    {{ user }}
+                </li>
             {% endfor %}
-        </li>
+            </ul>
+      <br>
+        <a href="{% url 'event_update' event.id %}" type="submit" class="btn btn-secondary">Edit</a>
+        <a href="{% url 'event_delete' event.id %}" type="submit" class="btn btn-danger">Delete</a>
     </ul>
     </p>
   </div>

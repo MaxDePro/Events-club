@@ -1,10 +1,80 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import calendar
 from calendar import HTMLCalendar
 from datetime import datetime
 from django.http import HttpResponseRedirect
 from .models import *
 from .forms import *
+
+
+def venue_delete(request, venue_id):
+    venue = Venue.objects.get(pk=venue_id)
+    venue.delete()
+    return redirect('venue_list')
+
+
+def event_delete(request, event_id):
+    event = Event.objects.get(pk=event_id)
+    event.delete()
+    return redirect('events_list')
+
+
+def event_update(request, event_id):
+    event = Event.objects.get(pk=event_id)
+    form = EventForm(request.POST or None, instance=event)
+    if form.is_valid():
+        form.save()
+        return redirect('events_list')
+    return render(request, 'events/event_update.html', context={'event': event, 'form': form})
+
+
+def create_event(request):
+    submitted = False
+    if request.method == 'POST':
+        form = EventForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('?submitted=True')
+    else:
+        form = EventForm
+        if 'submitted' in request.GET:
+            submitted = True
+    return render(request, 'events/create_event.html', context={'form': form, 'submitted': submitted})
+
+
+def venue_update(request, venue_id):
+    venue = Venue.objects.get(pk=venue_id)
+    form = VenueForm(request.POST or None, instance=venue)
+    if form.is_valid():
+        form.save()
+        return redirect('venue_list')
+
+    return render(request, 'events/venue_update.html', context={'venue': venue, 'form': form})
+
+
+def search_venue(request):
+    if request.method == 'POST':
+        searched = request.POST['searched']
+        venues = Venue.objects.filter(name__contains=searched)
+        return render(request, 'events/search_venue.html', {'searched': searched, 'venues': venues})
+    else:
+        return render(request, 'events/search_venue.html', {})
+
+
+def venue_detail(request, venue_id):
+    venue = Venue.objects.get(pk=venue_id)
+    context = {
+        'venue': venue
+    }
+    return render(request, 'events/venue_detail.html', context)
+
+
+def list_of_venue(request):
+    venue_list = Venue.objects.all()
+    context = {
+        'venue_list': venue_list
+    }
+    return render(request, 'events/venue.html', context)
 
 
 def create_venue(request):

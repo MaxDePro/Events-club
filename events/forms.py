@@ -3,6 +3,32 @@ from django.forms import ModelForm
 from . models import *
 
 
+class EventForm(ModelForm):
+    class Meta:
+        model = Event
+        fields = ('name', 'event_date', 'venue', 'manager','users', 'description')
+        labels = {
+            'name': '',
+            'event_date': 'YYYY-MM-DD HH:MM:SS',
+            'venue': 'Venue',
+            'manager': 'Manager',
+            'users': 'Users',
+            'description': '',
+
+        }
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Name'}),
+            'event_date': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Event date'}),
+            'venue': forms.Select(attrs={'class': 'form-select', 'placeholder': 'Venue'}),
+            'manager': forms.Select(attrs={'class': 'form-select', 'placeholder': 'Manager'}),
+            'users': forms.SelectMultiple(attrs={'class': 'form-select', 'placeholder': 'Users'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Description'}),
+
+        }
+
+
+
+
 class VenueForm(ModelForm):
     class Meta:
         model = Venue
