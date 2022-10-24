@@ -3,8 +3,48 @@ import calendar
 from calendar import HTMLCalendar
 from datetime import datetime
 from django.http import HttpResponseRedirect
+from django.http import HttpResponse
 from .models import *
 from .forms import *
+import csv
+
+
+# Generate a csv file with list of venue
+def venue_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=venues.csv'
+
+    # create a csv writer
+    writer = csv.writer(response)
+
+    venues = Venue.objects.all()
+
+    # add column headings to csv file
+    writer.writerow(['Venue name', 'Address', 'Zip_code', 'Phone', 'Web address', 'Email'])
+
+    # write content into list
+    for venue in venues:
+        writer.writerow([venue.name, venue.address, venue.zip_code, venue.phone, venue.email])
+
+    return response
+
+
+# Create a txt file with all venues
+def venue_text(request):
+    response = HttpResponse(content_type='text/plain')
+    response['Content-Disposition'] = 'attachment; filename=venues.txt'
+
+    # get the content for txt file
+    venues = Venue.objects.all()
+    lines = []
+    # write content into list
+    for venue in venues:
+        lines.append(
+            f'{venue.name}\n {venue.address}\n {venue.phone}\n {venue.zip_code}\n{venue.web}\n{venue.email}\n\n\n')
+
+    # write list into response
+    response.writelines(lines)
+    return response
 
 
 def venue_delete(request, venue_id):
@@ -70,7 +110,7 @@ def venue_detail(request, venue_id):
 
 
 def list_of_venue(request):
-    venue_list = Venue.objects.all()
+    venue_list = Venue.objects.all().order_by('name')
     context = {
         'venue_list': venue_list
     }
@@ -96,7 +136,6 @@ def home(request, year=datetime.now().year, month=datetime.now().strftime('%B'))
     month = month.capitalize()
     month_number = list(calendar.month_name).index(month)
     month_number = int(month_number)
-    name = 'John'
 
     now = datetime.now()
     cur_year = now.year
@@ -105,7 +144,6 @@ def home(request, year=datetime.now().year, month=datetime.now().strftime('%B'))
     cal = HTMLCalendar().formatmonth(year, month_number)
 
     context = {
-        'name': name,
         'year': year,
         'month': month,
         'month_number': month_number,
@@ -117,11 +155,9 @@ def home(request, year=datetime.now().year, month=datetime.now().strftime('%B'))
 
 
 def events_list(request):
-    list_events = Event.objects.all()
+    list_events = Event.objects.all().order_by('event_date')
 
     context = {
         'list_events': list_events
     }
     return render(request, 'events/events_list.html', context)
-
-
