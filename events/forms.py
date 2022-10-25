@@ -28,7 +28,6 @@ class EventForm(ModelForm):
 
 
 
-
 class VenueForm(ModelForm):
     class Meta:
         model = Venue
@@ -42,7 +41,7 @@ class VenueForm(ModelForm):
             'email': ''
         }
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username'}),
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'name'}),
             'address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'address'}),
             'zip_code': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Zip code'}),
             'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone'}),

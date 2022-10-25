@@ -20,3 +20,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('events.urls'))
 ]
+
+admin.site.site_header = 'Max club admin site'
+admin.site.site_title = 'You on my territory'
+admin.site.index_title = 'You on Max territory'
