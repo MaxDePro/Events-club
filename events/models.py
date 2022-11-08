@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import date
 
 
 class Venue(models.Model):
@@ -9,6 +10,8 @@ class Venue(models.Model):
     phone = models.CharField('Contact phone', max_length=15, blank=True)
     web = models.URLField('Website address', blank=True)
     email = models.EmailField('Email address', blank=True)
+    owner = models.IntegerField('Venue owner', blank=False, default=1)
+    venue_image = models.ImageField(null=True, blank=True, upload_to='images/')
 
     def __str__(self):
         return self.name
@@ -30,6 +33,14 @@ class Event(models.Model):
     manager = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL)
     description = models.TextField(blank=True)
     users = models.ManyToManyField(MyClubUser, blank=True)
+    approved = models.BooleanField('Approved event', default=False)
 
     def __str__(self):
         return self.name
+
+    @property
+    def days_to_event(self):
+        today = date.today()
+        days_till_event = self.event_date.date() - today
+        days_till_stripped = str(days_till_event).split(',')[0]
+        return days_till_stripped

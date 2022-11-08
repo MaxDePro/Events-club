@@ -1,6 +1,7 @@
 {% extends 'events/main.html' %}
 
 {% block content %}
+{% if user.is_authenticated %}
 <center>
     {% if submitted %}
         Your venue was succesful added!!!
@@ -8,12 +9,16 @@
     <h1>Create new Venue</h1>
     <br>
     <br>
-    <form action="" method="post">
+    <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
     {% endif %}
-</center>
 
+{% else %}
+    <h1>You must be logged yo view this page </h1>
+    <a class="btn btn-primary" href="{% url 'login_page' %}">login</a>
+</center>
+{% endif %}
 {% endblock %}

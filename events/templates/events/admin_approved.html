@@ -1,0 +1,85 @@
+{% extends 'events/main.html' %}
+
+{% block content %}
+
+<form action="" method="post">
+    {% csrf_token %}
+    <h1>Admin Dashboard</h1>
+    <div class="card">
+        <div class="card-header">
+            Event - Venue - User - Count - List
+        </div>
+        <div class="card-body">
+            <p class="card-text">Event count : {{ event_count }}</p>
+            <p class="card-text">Venue count : {{ venue_count }}</p>
+            <p class="card-text">User count : {{ user_count }}</p>
+        </div>
+    </div>
+
+    <br>
+    <br>
+
+    <table class="table table-stripped table-hover table-bordered">
+    <thead>
+    <tr>
+        <th scope="col">Venue name</th>
+        <th scope="col">Events</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for venue in venue_list %}
+    <tr>
+        <td>
+            <a href="{% url 'venue_detail' venue.id %}">{{ venue }}</a>
+        </td>
+        <td>
+            <a href="{% url 'venue_events' venue.id %}" class="btn btn-sm btn-secondary">List of events</a>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+
+</table>
+    <br>
+    <br>
+    <h1>Approved Events: </h1>
+<table class="table table-stripped table-hover table-bordered">
+    <thead>
+    <tr>
+        <th scope="col">Event name</th>
+        <th scope="col">Approved</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for event in events_list %}
+    <tr>
+        <td>
+            {{ event }}
+        </td>
+        <td>
+            {% if event.approved %}
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" checked="checked" value="{{ event.id }}"
+                           name="boxes">
+
+                </div>
+            {% else %}
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="{{ event.id }}" name="boxes">
+
+                </div>
+            {% endif %}
+        </td>
+    </tr>
+        <br>
+    {% endfor %}
+    </tbody>
+
+</table>
+    <button type="submit" class="btn btn-primary">
+        Update event
+    </button>
+</form>
+
+
+{% endblock %}

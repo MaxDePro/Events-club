@@ -2,15 +2,20 @@
 
 {% block content %}
 <center>
+{% if user.is_authenticated %}
 
     <h1>Update Venue ... </h1>
     <br>
-    <form action="" method="post">
+    <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <br>
         <button class="btn btn-secondary" type="submit">Update</button>
     </form>
+{% else %}
+    <h1>You must be logged yo view this page </h1>
+    <a class="btn btn-primary" href="{% url 'login_page' %}">login</a>
+{% endif %}
 
 </center>
 

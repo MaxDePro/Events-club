@@ -1,6 +1,8 @@
 {% extends 'events/main.html' %}
 
 {% block content %}
+{% if user.is_authenticated %}
+
     {% if submitted %}
         Your event was succesful added!!!
     {% else %}
@@ -13,5 +15,9 @@
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
     {% endif %}
+{% else %}
+    <h1>You must be logged yo view this page </h1>
+    <a class="btn btn-primary" href="{% url 'login_page' %}">login</a>
+{% endif %}
 
 {% endblock %}

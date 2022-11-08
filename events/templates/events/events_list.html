@@ -1,8 +1,10 @@
 {% extends 'events/main.html' %}
 
 {% block content %}
+
 <h1>Events: </h1>
 {% for event in list_events %}
+{% if event.approved %}
 <div class="card">
   <h5 class="card-header">{{ event }}</h5>
   <div class="card-body">
@@ -10,6 +12,9 @@
     <p class="card-text">
         <ul>
         <li>Date of event: {{ event.event_date }}</li>
+        <li>Days to event: {{ event.days_to_event }}</li>
+        <li>Approved: {{ event.approved }}</li>
+
         <li>Managers of event: {{ event.manager }}</li>
         <li>Venue website: {{ event.venue.web }}</li>
         <li>Description of event: {{ event.description }}</li>
@@ -24,12 +29,19 @@
             {% endfor %}
             </ul>
       <br>
-        <a href="{% url 'event_update' event.id %}" type="submit" class="btn btn-secondary">Edit</a>
-        <a href="{% url 'event_delete' event.id %}" type="submit" class="btn btn-danger">Delete</a>
+      {% if user.is_authenticated %}
+        {% if user == event.manager %}
+            <a href="{% url 'event_update' event.id %}" type="submit" class="btn btn-secondary">Edit</a>
+            <a href="{% url 'event_delete' event.id %}" type="submit" class="btn btn-danger">Delete</a>
+        {% endif %}
+      {% endif %}
     </ul>
     </p>
   </div>
 </div>
 <br>
+{% endif %}
 {% endfor %}
+
+
 {% endblock %}
