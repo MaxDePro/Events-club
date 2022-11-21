@@ -7,6 +7,20 @@
     As of time :
     {{ cur_time }}
     <p>{{ cal|safe }}</p>
+    <br>
+    <br>
+    <h3>Events this month</h3>
+
+    {% if event_list %}
+        {% for event in event_list %}
+            <a href="{% url 'event_detail' event.id %}">{{ event }}</a> -  {{ event.event_date }}
+            <br>
+
+        {% endfor %}
+    {% else %}
+        Sorry no events this month
+    {% endif %}
+    <br><br>
     Copyright (c) {{ cur_year }}
 </center>
 
