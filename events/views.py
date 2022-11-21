@@ -294,7 +294,7 @@ def create_venue(request):
         form = VenueForm(request.POST, request.FILES)
         if form.is_valid():
             venue = form.save(commit=False)
-            venue.owner = request.user.id # logged in user
+            venue.owner = request.user.idn  # logged in user
             venue.save()
             # form.save()
             return HttpResponseRedirect('?submitted=True')
